@@ -1,6 +1,6 @@
 import type { Video } from '../../../types';
 import SectionTitle from '../../atoms/SectionTitle';
-import SectionVideoItem from '../../atoms/SectionVideoItem';
+import VideoCard from '../carousel/VideoCard';
 
 interface HomeBannerProps {
   title: string
@@ -27,7 +27,7 @@ const HomeBanner = ({
         <p className="mt-2">{longDescription}</p>
       </div>
       <div className="flex-1">
-        <SectionVideoItem
+        <VideoCard
           url={url}
           poster={poster}
           description={description}

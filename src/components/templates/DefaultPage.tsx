@@ -2,7 +2,7 @@ import { Outlet } from 'react-router-dom';
 import Footer from '../organisms/Footer';
 import Header from '../organisms/Header';
 
-const Template = (): JSX.Element => {
+const DefaultPage = (): JSX.Element => {
   return (
     <>
       <Header />
@@ -12,4 +12,4 @@ const Template = (): JSX.Element => {
   );
 };
 
-export default Template;
+export default DefaultPage;

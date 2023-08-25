@@ -2,7 +2,7 @@
 import type { Category, ListOfVideos } from '../../../types';
 import HomeBanner from './HomeBanner';
 import SectionTitle from '../../atoms/SectionTitle';
-import SectionVideoItem from '../../atoms/SectionVideoItem';
+import Carousel from '../carousel/Carousel';
 
 interface HomeSectionProps {
   category: Category
@@ -13,7 +13,7 @@ const HomeSection = ({ category, videos }: HomeSectionProps): JSX.Element => {
   const { name, longDescription, shortDescription, color, isFeatured } =
     category;
 
-  const newVideos = (
+  const sortVideos = (
     videos: ListOfVideos,
     isFeatured: boolean
   ): ListOfVideos => {
@@ -36,20 +36,7 @@ const HomeSection = ({ category, videos }: HomeSectionProps): JSX.Element => {
           <p>{shortDescription}</p>
         </div>
       )}
-      <ul className="flex gap-[1.25%] text-lg w-full">
-        {newVideos(videos, isFeatured).map(
-          ({ id, poster, url, description }) => (
-            <SectionVideoItem
-              key={id}
-              className='flex-shrink-0 w-[32.5%]'
-              url={url}
-              poster={poster}
-              description={description}
-              color={color}
-            />
-          )
-        )}
-      </ul>
+      <Carousel color={color} videos={sortVideos(videos, isFeatured)} />
     </section>
   ) : (
     <></>

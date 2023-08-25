@@ -12,7 +12,9 @@ const Home = (): JSX.Element => {
 
   const orderCategories = (categories: ListOfCategories): ListOfCategories => {
     // First category that prop isFeatured is true
-    const firstFeaturedCategory = categories.find((category) => category.isFeatured);
+    const firstFeaturedCategory = categories.find(
+      (category) => category.isFeatured
+    );
     if (firstFeaturedCategory !== undefined) {
       const filteredCategories = [...categories].filter(
         (category) => category.id !== firstFeaturedCategory.id

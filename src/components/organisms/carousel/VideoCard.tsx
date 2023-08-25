@@ -1,4 +1,4 @@
-interface SectionVideoProps {
+interface VideoCardProps {
   url: string
   poster: string
   color: string
@@ -6,16 +6,16 @@ interface SectionVideoProps {
   className?: string
 }
 
-const SectionVideoItem = ({
+const VideoCard = ({
   url,
   poster,
   color,
   description,
   className = ''
-}: SectionVideoProps): JSX.Element => {
+}: VideoCardProps): JSX.Element => {
   return (
-    <li
-      className={`border-4 rounded block aspect-video${
+    <div
+      className={`border-4 rounded block aspect-video select-none${
         className !== '' ? ` ${className}` : ''
       }`}
       style={{ borderColor: color }}
@@ -25,8 +25,8 @@ const SectionVideoItem = ({
       >
         <img src={poster} alt={description} className="w-full h-full block" />
       </a>
-    </li>
+    </div>
   );
 };
 
-export default SectionVideoItem;
+export default VideoCard;
