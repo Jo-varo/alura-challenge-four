@@ -1,7 +1,7 @@
 const MainTemplate = ({
   children
 }: {
-  children: JSX.Element | JSX.Element[]
+  children: React.ReactNode
 }): JSX.Element => {
   return (
     <main className="bg-black text-white overflow-hidden">

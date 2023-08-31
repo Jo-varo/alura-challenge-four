@@ -1,5 +1,5 @@
 export interface Video {
-  id: number
+  id: idVidCat
   title: string
   url: string
   poster: string
@@ -10,7 +10,7 @@ export interface Video {
 export type ListOfVideos = Video[];
 
 export interface Category {
-  id: number
+  id: idVidCat
   name: string
   shortDescription: string
   longDescription: string
@@ -19,4 +19,23 @@ export interface Category {
   isFeatured: boolean
 }
 
-export type ListOfCategories = Category[]
+export type ListOfCategories = Category[];
+
+export type idVidCat = string | number;
+
+export interface VideoData {
+  title: string
+  url: string
+  poster: string
+  category: string
+  description: string
+}
+
+export interface CategoryData {
+  name: string
+  shortDescription: string
+  longDescription: string
+  code: string
+  color: string
+  isFeatured: boolean
+}

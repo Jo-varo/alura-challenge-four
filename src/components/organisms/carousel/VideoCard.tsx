@@ -20,9 +20,7 @@ const VideoCard = ({
       }`}
       style={{ borderColor: color }}
     >
-      <a
-        href={url}
-      >
+      <a href={url} target="_blank" rel="noreferrer">
         <img src={poster} alt={description} className="w-full h-full block" />
       </a>
     </div>
