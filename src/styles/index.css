@@ -8,9 +8,18 @@
   @apply bg-top bg-[length:100%] bg-no-repeat;
 }
 
+body{
+  min-height: 100vh;
+  background-color: black;
+}
+
 /* Form */
 .input-field {
   @apply bg-neutral-900 block w-full p-4 rounded border border-gray-400;
+}
+
+.color-field {
+  @apply bg-neutral-900 block w-full py-2 px-4 rounded border border-gray-400 h-[58px];
 }
 
 .field-group {

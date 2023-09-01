@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { ImSpinner2 } from 'react-icons/im';
 import Button from '../atoms/Button';
 
 interface FormButtonsProps {
@@ -12,12 +13,13 @@ const FormButtons = ({
   resetForm,
   type
 }: FormButtonsProps): JSX.Element => {
+  console.log(isSubmitting)
   return (
     <div className="flex justify-between mt-4">
-      <div>
+      <div className='flex items-center'>
         <Button
           variant="blue"
-          text={isSubmitting ? 'Cargando' : 'Guardar'}
+          text={isSubmitting ? <ImSpinner2 className="animate-spin w-6 h-6" /> : 'Guardar'}
           className="mr-8 disabled:bg-blue-950 disabled:text-white disabled:border-blue-950"
           disabled={isSubmitting}
           submit

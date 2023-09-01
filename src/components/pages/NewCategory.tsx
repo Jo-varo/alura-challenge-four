@@ -10,6 +10,7 @@ import Table from '../organisms/table/Table';
 import MainTemplate from '../templates/MainTemplate';
 import FormTemplate from '../templates/form/FormTemplate';
 import FormButtons from '../molecules/FormButtons';
+import FormInputGroup from '../molecules/FormInputGroup';
 
 interface CategoryDataForm extends Category {
   key: string
@@ -58,6 +59,7 @@ const NewCategory = (): JSX.Element => {
     initialDataCategoryForm
   );
   const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [showTable, setShowTable] = useState(false);
 
   const formRef = useRef<HTMLDivElement>(null);
 
@@ -84,83 +86,44 @@ const NewCategory = (): JSX.Element => {
           >
             {({ handleSubmit, handleReset, isSubmitting }) => (
               <form onSubmit={handleSubmit} className="relative">
-                <div className="field-group">
-                  <label htmlFor="name">Nombre de la categoria</label>
-                  <Field
-                    type="text"
-                    name="name"
-                    placeholder="Nombre de la categoria"
-                    required
-                    className="input-field"
-                  />
-                  <ErrorMessage component="p" name="name" className="error" />
-                </div>
-                <div className="field-group">
-                  <label htmlFor="shortDescription">Descripción corta</label>
-                  <Field
-                    type="text"
-                    name="shortDescription"
-                    placeholder="Descripción corta"
-                    required
-                    className="input-field"
-                  />
-                  <ErrorMessage
-                    component="p"
-                    name="shortDescription"
-                    className="error"
-                  />
-                </div>
-                <div className="field-group">
-                  <label htmlFor="longDescription">Descripción larga</label>
-                  <Field
-                    component="textarea"
-                    type="text"
-                    name="longDescription"
-                    placeholder="Descripción larga"
-                    className="input-field"
-                  />
-                  <ErrorMessage
-                    component="p"
-                    name="longDescription"
-                    className="error"
-                  />
-                </div>
+                <FormInputGroup
+                  idName="name"
+                  text="Nombre de la categoria"
+                  type="text"
+                />
+                <FormInputGroup
+                  idName="shortDescription"
+                  text="Descripción corta"
+                  type="text"
+                />
+                <FormInputGroup
+                  idName="longDescription"
+                  text="Descripción larga"
+                  as="textarea"
+                />
                 <div className="flex gap-4 field-group">
-                  <div className="flex-1">
-                    <label htmlFor="code">Código de categoria</label>
-                    <Field
-                      type="text"
-                      name="code"
-                      placeholder="Código de categoria"
-                      className="input-field"
-                    />
-                    <ErrorMessage component="p" name="code" className="error" />
-                  </div>
-                  <div className="flex-1">
-                    <label htmlFor="color">Color</label>
-                    <Field
-                      type="color"
-                      name="color"
-                      placeholder="Color"
-                      className="bg-neutral-900 block w-full p-2 rounded border border-gray-400 h-[70%] box-border"
-                    />
-                    <ErrorMessage
-                      component="p"
-                      name="color"
-                      className="error"
-                    />
-                  </div>
+                  <FormInputGroup
+                    idName="code"
+                    text="Código de categoria"
+                    type="text"
+                    newClasses="flex-1"
+                  />
+                  <FormInputGroup
+                    idName="color"
+                    text="Color de categoria"
+                    type="color"
+                    newClasses="flex-1"
+                  />
                 </div>
                 <div className="field-group">
                   <div className="flex items-center">
-                    <label htmlFor="isFeatured">
+                    <label htmlFor="isFeatured" className="select-none">
                       ¿Resaltar categoria en la página principal?
                     </label>
                     <Field
                       type="checkbox"
                       name="isFeatured"
                       id="isFeatured"
-                      placeholder="Color"
                       className="border h-5 w-5 ml-4"
                     />
                   </div>
@@ -170,16 +133,11 @@ const NewCategory = (): JSX.Element => {
                     className="error"
                   />
                 </div>
-                <div className="field-group">
-                  <label htmlFor="key">Código de seguridad</label>
-                  <Field
-                    name="key"
-                    type="text"
-                    placeholder="Código de seguridad"
-                    className="input-field"
-                  />
-                  <ErrorMessage component="p" name="key" className="error" />
-                </div>
+                <FormInputGroup
+                  idName="key"
+                  text="Código de seguridad"
+                  type="text"
+                />
                 <FormButtons
                   type="category"
                   isSubmitting={isSubmitting}
@@ -192,12 +150,22 @@ const NewCategory = (): JSX.Element => {
             )}
           </Formik>
         </FormTemplate>
-        <Table
-          data={categories}
-          removeItem={deleteCategory}
-          editItem={handleEdit}
-          headers={tableHeaders}
-        />
+        <h2
+          className="inline-block text-2xl cursor-pointer select-none hover:underline mt-10"
+          onClick={() => {
+            setShowTable(!showTable);
+          }}
+        >
+          Mostrar todas las categorias
+        </h2>
+        {showTable && (
+          <Table
+            data={categories}
+            removeItem={deleteCategory}
+            editItem={handleEdit}
+            headers={tableHeaders}
+          />
+        )}
       </div>
     </MainTemplate>
   );

@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Formik, Field, ErrorMessage } from 'formik';
+import { Formik } from 'formik';
 
 import type { Category, Video } from '../../types';
 import { VideoFormSchema } from '../../constants/validations';
@@ -8,6 +8,8 @@ import { useData } from '../../context/DataContext';
 import { apiCode } from '../../constants/variables';
 import FormButtons from '../molecules/FormButtons';
 import Table from '../organisms/table/Table';
+import FormTemplate from '../templates/form/FormTemplate';
+import FormInputGroup from '../molecules/FormInputGroup';
 
 interface VideoDataForm extends Video {
   key: string
@@ -54,14 +56,14 @@ const NewVideo = (): JSX.Element => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [videoDataForm, setVideoDataForm] =
     useState<VideoDataForm>(initialDataVideoForm);
+  const [showTable, setShowTable] = useState(false);
 
   const formRef = useRef<HTMLDivElement>(null);
 
   return (
     <MainTemplate>
       <div className="py-10" ref={formRef}>
-        <div className="w-1/2 mx-auto px-6 py-8 rounded border-2 border-neutral-500">
-          <h1 className="text-4xl text-center mb-10">Nuevo Video</h1>
+        <FormTemplate title="Nuevo Video">
           <Formik
             initialValues={videoDataForm}
             validationSchema={VideoFormSchema}
@@ -81,86 +83,39 @@ const NewVideo = (): JSX.Element => {
           >
             {({ handleSubmit, handleReset, isSubmitting, errors, touched }) => (
               <form onSubmit={handleSubmit} className="relative">
-                <div className="field-group">
-                  <label htmlFor="title">Titulo</label>
-                  <Field
-                    type="text"
-                    name="title"
-                    placeholder="Titulo"
-                    required
-                    className="input-field"
-                  />
-                  <ErrorMessage component="p" name="title" className="error" />
-                </div>
-                <div className="field-group">
-                  <label htmlFor="url">Link del video</label>
-                  <Field
-                    type="text"
-                    name="url"
-                    placeholder="Link del video"
-                    required
-                    className="input-field"
-                  />
-                  <ErrorMessage component="p" name="url" className="error" />
-                </div>
-                <div className="field-group">
-                  <label htmlFor="poster">Link imagen de video</label>
-                  <Field
-                    name="poster"
-                    type="text"
-                    placeholder="Link imagen de video"
-                    required
-                    className="input-field"
-                  />
-                  <ErrorMessage component="p" name="poster" className="error" />
-                </div>
-                <div className="field-group">
-                  <label htmlFor="category">Categoria</label>
-                  <Field
-                    as="select"
-                    name="category"
-                    required
-                    className="input-field"
-                  >
-                    <option value="" disabled hidden>
-                      Seleccione categoria
+                <FormInputGroup idName="title" type="text" text="Titulo" />
+                <FormInputGroup
+                  idName="url"
+                  type="text"
+                  text="Link del video"
+                />
+                <FormInputGroup
+                  idName="poster"
+                  type="text"
+                  text="Link imagen de video"
+                />
+                <FormInputGroup
+                  idName="category"
+                  as="select"
+                  text="Seleccione categoria"
+                >
+                  {categories.map(({ id, code, name }) => (
+                    <option key={id} value={code}>
+                      {name}
                     </option>
-                    {categories.map(({ id, code, name }) => (
-                      <option key={id} value={code}>
-                        {name}
-                      </option>
-                    ))}
-                  </Field>
-                  <ErrorMessage
-                    component="p"
-                    name="category"
-                    className="error"
-                  />
-                </div>
-                <div className="field-group">
-                  <label htmlFor="category">Descripción</label>
-                  <Field
-                    component="textarea"
-                    name="description"
-                    className="input-field"
-                    placeholder="Descripción"
-                  />
-                  <ErrorMessage
-                    component="p"
-                    name="description"
-                    className="error"
-                  />
-                </div>
-                <div className="field-group">
-                  <label htmlFor="key">Código de seguridad</label>
-                  <Field
-                    name="key"
-                    type="text"
-                    placeholder="Código de seguridad"
-                    className="input-field"
-                  />
-                  <ErrorMessage component="p" name="key" className="error" />
-                </div>
+                  ))}
+                </FormInputGroup>
+                <FormInputGroup
+                  idName="description"
+                  type="text"
+                  text="Descripción"
+                  as="textarea"
+                />
+                <FormInputGroup
+                  idName="key"
+                  type="text"
+                  text="Código de seguridad"
+                />
                 <FormButtons
                   type="video"
                   isSubmitting={isSubmitting}
@@ -172,14 +127,24 @@ const NewVideo = (): JSX.Element => {
               </form>
             )}
           </Formik>
-        </div>
-        <Table
-          data={videos}
-          categories={categories}
-          headers={tableHeaders}
-          editItem={handleEdit}
-          removeItem={deleteVideo}
-        />
+        </FormTemplate>
+        <h2
+          className="inline-block text-2xl cursor-pointer select-none hover:underline mt-10"
+          onClick={() => {
+            setShowTable(!showTable);
+          }}
+        >
+          Mostrar todos los videos
+        </h2>
+        {showTable && (
+          <Table
+            data={videos}
+            categories={categories}
+            headers={tableHeaders}
+            editItem={handleEdit}
+            removeItem={deleteVideo}
+          />
+        )}
       </div>
     </MainTemplate>
   );

@@ -9,7 +9,7 @@ export const VideoFormSchema = Yup.object().shape({
   poster: Yup.string().required('Campo requerido'),
   category: Yup.string().required('Campo requerido'),
   description: Yup.string().max(50, 'Demasiado largo'),
-  code: Yup.string().max(50, 'Demasiado largo').required('Campo requerido')
+  key: Yup.string().max(50, 'Demasiado largo').required('Campo requerido')
 });
 
 export const CategoryFormSchema = Yup.object().shape({
@@ -21,5 +21,6 @@ export const CategoryFormSchema = Yup.object().shape({
   longDescription: Yup.string().max(250, 'Demasiado largo'),
   code: Yup.string().max(10, 'Demasiado largo'),
   color: Yup.string(),
-  isFeatured: Yup.string()
+  isFeatured: Yup.boolean(),
+  key: Yup.string().max(50, 'Demasiado largo').required('Campo requerido')
 });

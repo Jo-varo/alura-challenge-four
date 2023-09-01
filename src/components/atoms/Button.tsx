@@ -1,6 +1,6 @@
 interface ButtonProps {
   variant: variantType
-  text: string
+  text: string | JSX.Element
   className?: string
   submit?: boolean
   onClick?: (evt: React.MouseEvent) => void
