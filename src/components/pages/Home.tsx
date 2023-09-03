@@ -1,7 +1,8 @@
+import { useData } from '../../context/dataContext';
+import type { ListOfCategories } from '../../types';
 import MainTemplate from '../templates/MainTemplate';
 import HomeSection from '../organisms/home/HomeSection';
-import type { ListOfCategories } from '../../types';
-import { useData } from '../../context/DataContext';
+import HomeNoData from '../molecules/HomeNoData';
 
 const Home = (): JSX.Element => {
   const {
@@ -26,13 +27,20 @@ const Home = (): JSX.Element => {
 
   return (
     <MainTemplate>
-      {orderCategories(categories).map((category) => (
-        <HomeSection
-          key={category.id}
-          category={category}
-          videos={videos.filter((video) => video.category === category.code)}
-        />
-      ))}
+      {categories.length > 0
+        ? (
+            orderCategories(categories).map((category) => (
+          <HomeSection
+            key={category.id}
+            category={category}
+            videos={videos.filter((video) => video.category === category.code)}
+          />
+            ))
+          )
+        : (
+        <HomeNoData type="category" />
+          )}
+      {videos.length === 0 && <HomeNoData type="video" />}
     </MainTemplate>
   );
 };
