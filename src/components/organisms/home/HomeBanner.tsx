@@ -21,7 +21,7 @@ const HomeBanner = ({
 
   return (
     <div className="pt-60 pb-14 flex gap-10">
-      <div className="flex-1">
+      <div className="flex-1 text-white">
         <SectionTitle banner text={title} color={color} />
         <h3 className="text-4xl mt-4 font-semibold">{shortDescription}</h3>
         <p className="mt-2">{longDescription}</p>

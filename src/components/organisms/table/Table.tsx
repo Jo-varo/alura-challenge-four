@@ -53,7 +53,11 @@ const Table = ({
       <thead>
         <tr>
           {headers.map(({ title, width }, i) => (
-            <th key={`th-${i}`} className="table-data-header" style={{ width }}>
+            <th
+              key={`th-${i}`}
+              className="border-4 border-blue-600 p-3 text-xl"
+              style={{ width }}
+            >
               {title}
             </th>
           ))}
@@ -63,13 +67,16 @@ const Table = ({
         {data.map(({ id, ...obj }) => (
           <tr key={id}>
             {Object.entries(obj).map(([name, value], i) => (
-              <td key={`td-${i}`} className="table-data-cell">
+              <td
+                key={`td-${i}`}
+                className="border border-gray-700 overflow-hidden p-2"
+              >
                 {tableData(name, value)}
               </td>
             ))}
-            <td className="table-data-cell text-center">
+            <td className="text-center border border-gray-700 overflow-hidden p-2">
               <p
-                className="hover:underline cursor-pointer font-bold select-none"
+                className="hover:underline cursor-pointer font-bold select-none py-3"
                 onClick={() => {
                   editItem({ id, ...obj });
                 }}
@@ -77,9 +84,9 @@ const Table = ({
                 Editar
               </p>
             </td>
-            <td className="table-data-cell text-center">
+            <td className="text-center border border-gray-700 overflow-hidden p-2">
               <p
-                className="hover:underline cursor-pointer font-bold select-none"
+                className="hover:underline cursor-pointer font-bold select-none py-3"
                 onClick={() => {
                   removeItem(id);
                 }}

@@ -55,7 +55,6 @@ export const DataProvider = ({
   };
 
   const createVideo = (video: VideoData): void => {
-    console.log('creating...');
     const id = crypto.randomUUID();
     const newVideos = [...videos, { id, ...video }];
     setVideos(newVideos);

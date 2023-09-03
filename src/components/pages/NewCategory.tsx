@@ -1,14 +1,16 @@
 import { useRef, useState } from 'react';
 import { ErrorMessage, Field, Formik } from 'formik';
+import toast from 'react-hot-toast';
 
+import type { Category, Video, idVidCat } from '../../types';
 import { CategoryFormSchema } from '../../constants/validations';
 import { apiCode } from '../../constants/variables';
 
-import type { Category, Video } from '../../types';
-import { useData } from '../../context/DataContext';
-import Table from '../organisms/table/Table';
+import { useTheme } from '../../context/themeContext';
+import { useData } from '../../context/dataContext';
 import MainTemplate from '../templates/MainTemplate';
 import FormTemplate from '../templates/form/FormTemplate';
+import Table from '../organisms/table/Table';
 import FormButtons from '../molecules/FormButtons';
 import FormInputGroup from '../molecules/FormInputGroup';
 
@@ -20,6 +22,8 @@ const NewCategory = (): JSX.Element => {
   const {
     catgs: { categories, deleteCategory, updateCategory, createCategory }
   } = useData();
+
+  const { isLight } = useTheme();
 
   const tableHeaders = [
     { title: 'Categoria', width: '15%' },
@@ -38,7 +42,7 @@ const NewCategory = (): JSX.Element => {
     shortDescription: '',
     longDescription: '',
     code: '',
-    color: '#000000',
+    color: '#A2C29E',
     isFeatured: false,
     key: ''
   };
@@ -48,6 +52,42 @@ const NewCategory = (): JSX.Element => {
     setIsEditing(true);
     setCategoryDataForm({ ...category, key: '' });
     formRef.current?.scrollIntoView();
+  };
+
+  const handleDelete = (_id: idVidCat): void => {
+    toast(
+      (t) => (
+        <div>
+          <p className={`${isLight ? 'text-black' : 'text-white'} mb-3`}>
+            ¿Estas seguro de eliminar la categoria?
+          </p>
+          <div className="flex items-center justify-evenly px-4">
+            <button
+              className="bg-red-500 hover:bg-red-600 px-3 py-2 text-white rounded-sm mx-2"
+              onClick={() => {
+                deleteCategory(_id);
+                toast.dismiss(t.id);
+              }}
+            >
+              Eliminar
+            </button>
+            <button
+              className="bg-slate-400 hover:bg-slate-600 px-3 py-2 text-white rounded-sm mx-2"
+              onClick={() => {
+                toast.dismiss(t.id);
+              }}
+            >
+              Cancelar
+            </button>
+          </div>
+        </div>
+      ),
+      {
+        style: {
+          background: isLight ? '#ededed' : '#202020'
+        }
+      }
+    );
   };
 
   const resetCategoryFormState = (): void => {
@@ -73,49 +113,66 @@ const NewCategory = (): JSX.Element => {
             onSubmit={(values, actions) => {
               const { id, key, ...data } = values;
               if (key !== apiCode) {
-                alert('codigo incorrecto');
+                toast.error('Código de seguridad incorrecto', {
+                  className: !isLight ? 'bg-neutral-800 text-white' : ''
+                });
                 actions.setSubmitting(false);
                 return;
               }
               isEditing ? updateCategory(id, data) : createCategory(data);
+              toast.success(
+                isEditing ? 'Categoria actualizada' : 'Categoria creada',
+                {
+                  className: !isLight ? 'bg-neutral-800 text-white' : ''
+                }
+              );
               actions.setSubmitting(false);
               actions.resetForm();
               resetCategoryFormState();
             }}
             enableReinitialize
           >
-            {({ handleSubmit, handleReset, isSubmitting }) => (
+            {({ handleSubmit, handleReset, isSubmitting, touched, errors }) => (
               <form onSubmit={handleSubmit} className="relative">
                 <FormInputGroup
                   idName="name"
                   text="Nombre de la categoria"
                   type="text"
+                  error={errors.name != null && touched.name}
                 />
                 <FormInputGroup
                   idName="shortDescription"
                   text="Descripción corta"
                   type="text"
+                  error={
+                    errors.shortDescription != null && touched.shortDescription
+                  }
                 />
                 <FormInputGroup
                   idName="longDescription"
                   text="Descripción larga"
                   as="textarea"
+                  error={
+                    errors.longDescription != null && touched.longDescription
+                  }
                 />
-                <div className="flex gap-4 field-group">
+                <div className="flex gap-4 mb-8">
                   <FormInputGroup
                     idName="code"
                     text="Código de categoria"
                     type="text"
                     newClasses="flex-1"
+                    error={errors.code != null && touched.code}
                   />
                   <FormInputGroup
                     idName="color"
                     text="Color de categoria"
                     type="color"
                     newClasses="flex-1"
+                    error={errors.color != null && touched.color}
                   />
                 </div>
-                <div className="field-group">
+                <div className="mb-8">
                   <div className="flex items-center">
                     <label htmlFor="isFeatured" className="select-none">
                       ¿Resaltar categoria en la página principal?
@@ -137,6 +194,7 @@ const NewCategory = (): JSX.Element => {
                   idName="key"
                   text="Código de seguridad"
                   type="text"
+                  error={errors.key != null && touched.key}
                 />
                 <FormButtons
                   type="category"
@@ -150,22 +208,24 @@ const NewCategory = (): JSX.Element => {
             )}
           </Formik>
         </FormTemplate>
-        <h2
-          className="inline-block text-2xl cursor-pointer select-none hover:underline mt-10"
-          onClick={() => {
-            setShowTable(!showTable);
-          }}
-        >
-          Mostrar todas las categorias
-        </h2>
-        {showTable && (
-          <Table
-            data={categories}
-            removeItem={deleteCategory}
-            editItem={handleEdit}
-            headers={tableHeaders}
-          />
-        )}
+        <div className="px-8">
+          <h2
+            className="inline-block text-2xl cursor-pointer select-none hover:underline mt-10"
+            onClick={() => {
+              setShowTable(!showTable);
+            }}
+          >
+            Mostrar todas las categorias
+          </h2>
+          {showTable && (
+            <Table
+              data={categories}
+              removeItem={handleDelete}
+              editItem={handleEdit}
+              headers={tableHeaders}
+            />
+          )}
+        </div>
       </div>
     </MainTemplate>
   );

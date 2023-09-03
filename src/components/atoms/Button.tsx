@@ -7,7 +7,7 @@ interface ButtonProps {
   disabled?: boolean
 }
 
-type variantType = 'black' | 'blue' | 'gray';
+type variantType = 'black' | 'blue' | 'gray' | 'white';
 
 const Button = ({
   variant,
@@ -20,7 +20,8 @@ const Button = ({
   const colors = {
     black: 'bg-black border-white text-white hover:bg-white hover:text-black',
     blue: 'bg-blue-600 border-blue-600 text-white hover:bg-white hover:text-blue-600',
-    gray: 'bg-gray-300 border-gray-400 text-black hover:bg-black hover:text-white'
+    gray: 'bg-gray-300 border-gray-400 text-black hover:bg-black hover:text-white',
+    white: 'bg-white border-black text-black hover:bg-black hover:text-white'
   };
 
   const classes = (variant: variantType, className: string): string => {
@@ -31,7 +32,7 @@ const Button = ({
 
   return (
     <button
-      className={`border rounded px-4 py-2 ${classes(variant, className)}`}
+      className={`border rounded px-2 py-1 md:px-4 md:py-2 select-none ${classes(variant, className)}`}
       type={submit ? 'submit' : 'button'}
       onClick={onClick}
       disabled={disabled}

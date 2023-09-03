@@ -13,7 +13,6 @@ const FormButtons = ({
   resetForm,
   type
 }: FormButtonsProps): JSX.Element => {
-  console.log(isSubmitting)
   return (
     <div className="flex justify-between mt-4">
       <div className='flex items-center'>
