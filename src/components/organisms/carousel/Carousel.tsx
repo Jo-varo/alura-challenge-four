@@ -17,7 +17,8 @@ const Carousel = ({ color, videos }: CarouselProps): JSX.Element => {
       style={{
         '--swiper-navigation-color': 'white'
       }}
-      slidesPerView={3}
+      slidesPerView={1}
+      breakpoints={{ 768: { slidesPerView: 3 } }}
       spaceBetween={15}
       rewind
       navigation

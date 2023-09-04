@@ -29,7 +29,7 @@ const HomeSection = ({ category, videos }: HomeSectionProps): JSX.Element => {
   };
 
   return videos.length > 0 ? (
-    <section className={`mb-14 px-8${sectionClasses(isFeatured, isLight)}`}>
+    <section className={`mb-14 px-4 md:px-8${sectionClasses(isFeatured, isLight)}`}>
       {isFeatured ? (
         <HomeBanner
           title={name}
@@ -39,7 +39,7 @@ const HomeSection = ({ category, videos }: HomeSectionProps): JSX.Element => {
           video={videos[0]}
         />
       ) : (
-        <div className="flex gap-5 h-10 items-baseline mb-8">
+        <div className="flex flex-col md:flex-row gap-2 md:gap-5 items-baseline mb-4 md:mb-8">
           <SectionTitle text={name} color={color} />
           <p>{shortDescription}</p>
         </div>

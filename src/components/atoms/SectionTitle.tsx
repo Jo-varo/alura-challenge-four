@@ -11,8 +11,8 @@ const SectionTitle = ({
 }: SectionTitleProps): JSX.Element => {
   return (
     <h2
-      className={`px-4 select-none text-white ${
-        banner ? 'py-4 text-6xl inline-block' : 'py-2 text-2xl'
+      className={`px-4 select-none text-white rounded-sm ${
+        banner ? 'py-2 md:py-4 text-2xl md:text-6xl inline-block' : 'py-1 md:py-2 text-lg md:text-2xl'
       }`}
       style={{ backgroundColor: color }}
     >

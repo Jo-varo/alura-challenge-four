@@ -1,8 +1,8 @@
 import * as Yup from 'yup';
 
 const securityCode = Yup.string()
-  .max(50, 'Codigo demasiado largo, máximo 50 caracteres')
-  .required('Campo requerido');
+  .max(50, 'Código demasiado largo, máximo 50 caracteres')
+  .required('Código de seguridad requerido');
 
 export const VideoFormSchema = Yup.object().shape({
   title: Yup.string()
@@ -12,7 +12,7 @@ export const VideoFormSchema = Yup.object().shape({
   url: Yup.string().required('Campo requerido'),
   poster: Yup.string().required('Campo requerido'),
   category: Yup.string().required('Campo requerido'),
-  description: Yup.string().max(125, 'Demasiado largo'),
+  description: Yup.string().max(150, 'Demasiado largo, máximo 150 caracteres'),
   key: securityCode
 });
 

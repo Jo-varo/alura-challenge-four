@@ -13,6 +13,7 @@ import FormTemplate from '../templates/form/FormTemplate';
 import Table from '../organisms/table/Table';
 import FormButtons from '../molecules/FormButtons';
 import FormInputGroup from '../molecules/FormInputGroup';
+import { toastHandleDelete } from '../molecules/toastForm/toastDelete';
 
 interface CategoryDataForm extends Category {
   key: string
@@ -51,43 +52,16 @@ const NewCategory = (): JSX.Element => {
     const category = obj as Category;
     setIsEditing(true);
     setCategoryDataForm({ ...category, key: '' });
-    formRef.current?.scrollIntoView();
+    formRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const handleDelete = (_id: idVidCat): void => {
-    toast(
-      (t) => (
-        <div>
-          <p className={`${isLight ? 'text-black' : 'text-white'} mb-3`}>
-            ¿Estas seguro de eliminar la categoria?
-          </p>
-          <div className="flex items-center justify-evenly px-4">
-            <button
-              className="bg-red-500 hover:bg-red-600 px-3 py-2 text-white rounded-sm mx-2"
-              onClick={() => {
-                deleteCategory(_id);
-                toast.dismiss(t.id);
-              }}
-            >
-              Eliminar
-            </button>
-            <button
-              className="bg-slate-400 hover:bg-slate-600 px-3 py-2 text-white rounded-sm mx-2"
-              onClick={() => {
-                toast.dismiss(t.id);
-              }}
-            >
-              Cancelar
-            </button>
-          </div>
-        </div>
-      ),
-      {
-        style: {
-          background: isLight ? '#ededed' : '#202020'
-        }
-      }
-    );
+  const handleDelete = (id: idVidCat): void => {
+    toastHandleDelete({
+      isLight,
+      idItem: id,
+      type: 'category',
+      deleteItem: deleteCategory
+    });
   };
 
   const resetCategoryFormState = (): void => {
@@ -105,7 +79,7 @@ const NewCategory = (): JSX.Element => {
 
   return (
     <MainTemplate>
-      <div className="py-10" ref={formRef}>
+      <div className="py-5 md:py-10" ref={formRef}>
         <FormTemplate title="Nueva Categoría">
           <Formik
             initialValues={categoryDataForm}
@@ -136,7 +110,7 @@ const NewCategory = (): JSX.Element => {
               <form onSubmit={handleSubmit} className="relative">
                 <FormInputGroup
                   idName="name"
-                  text="Nombre de la categoria"
+                  text="Nombre de la categoría"
                   type="text"
                   error={errors.name != null && touched.name}
                 />
@@ -156,26 +130,26 @@ const NewCategory = (): JSX.Element => {
                     errors.longDescription != null && touched.longDescription
                   }
                 />
-                <div className="flex gap-4 mb-8">
+                <div className="flex flex-col md:flex-row gap-6 md:gap-4 mb-6 md:mb-8">
                   <FormInputGroup
                     idName="code"
-                    text="Código de categoria"
+                    text="Código de categoría"
                     type="text"
                     newClasses="flex-1"
                     error={errors.code != null && touched.code}
                   />
                   <FormInputGroup
                     idName="color"
-                    text="Color de categoria"
+                    text="Color de categoría"
                     type="color"
                     newClasses="flex-1"
                     error={errors.color != null && touched.color}
                   />
                 </div>
-                <div className="mb-8">
+                <div className="mb-6 md:mb-8">
                   <div className="flex items-center">
                     <label htmlFor="isFeatured" className="select-none">
-                      ¿Resaltar categoria en la página principal?
+                      ¿Resaltar categoría en la página principal?
                     </label>
                     <Field
                       type="checkbox"
@@ -208,21 +182,22 @@ const NewCategory = (): JSX.Element => {
             )}
           </Formik>
         </FormTemplate>
-        <div className="px-8">
+        <div className="px-4 md:px-8 overflow-x-auto">
           <h2
             className="inline-block text-2xl cursor-pointer select-none hover:underline mt-10"
             onClick={() => {
               setShowTable(!showTable);
             }}
           >
-            Mostrar todas las categorias
+            {showTable ? 'Esconder' : 'Mostrar'} todas las categorías
           </h2>
           {showTable && (
             <Table
               data={categories}
-              removeItem={handleDelete}
-              editItem={handleEdit}
               headers={tableHeaders}
+              type="category"
+              editItem={handleEdit}
+              removeItem={handleDelete}
             />
           )}
         </div>

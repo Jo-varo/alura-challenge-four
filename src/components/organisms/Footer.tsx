@@ -1,5 +1,6 @@
 import { useTheme } from '../../context/themeContext';
 import AuthorFooter from './AuthorFooter';
+import aluraflix from '../../assets/aluraflix.svg';
 
 const Footer = (): JSX.Element => {
   const { isLight } = useTheme();
@@ -11,9 +12,11 @@ const Footer = (): JSX.Element => {
       } border-t-2 border-blue-700 md:px-0 text-sm md:text-base`}
     >
       <div className="max-w-[1300px] mx-auto">
-        <h3 className="font-bold text-3xl text-blue-700 text-center mt-2">
-          ALURAFLIX
-        </h3>
+        <img
+          src={aluraflix}
+          alt="aluraflix logo"
+          className="w-40 mx-auto my-2"
+        />
       </div>
       <AuthorFooter />
     </footer>

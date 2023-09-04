@@ -1,31 +1,28 @@
-## Expanding the ESLint configuration
+# Alura Challenge Four / Grupo 5
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+> Este proyecto usa Vite, React TypeScript, Tailwind CSS, Swiper, Formik, Yup, React-icons, React-hot-toast
 
-- Configure the top-level `parserOptions` property like this:
+Este es el último proyecto hecho para el challenge ONE de Alura y el último challenge de Alura Oracle Next Education, este proyecto es un gestor de videos.
 
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
-```
+Este proyecto me sirvió para practicar React, Typescript y algunas librerías que aportan diferentes funcionalidades.
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:s@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+Desarrollado por **[Jo-Varo](https://github.com/Jo-varo)**.
+
+Para ejecutar este proyecto, ejecutar el siguiente comando.
+
+``` npm run start ```
+
+---
 
 
+> Este proyecto usa iconos de [React Icons](https://react-icons.github.io/react-icons), la imagen del banner es de [Unsplash](https://unsplash.com/).
 
-Este proyecto fue hecho con Vite, React TypeScript, Tailwind CSS, Swiper, Formik, React-Icons
 
-UseContext tendra el array de todos los videos y el tema Dark/Light
+---
 
-TODO:
-Hacerlo responsive
+## Agradecimientos
 
-Consumir una fake api
-Hacer Deploy
-Prepararse para backend
+> - [Alura](https://www.aluracursos.com/) por aceptarme en su programa Alura One.
+> - [Oracle](https://www.oracle.com/pe/education/oracle-next-education/) por aceptarme en su programa ONE – Oracle Next Education.
+> - [MDN](https://developer.mozilla.org/) por su excelente documentación.
+> - [React](https://react.dev/) por su excelente documentación.

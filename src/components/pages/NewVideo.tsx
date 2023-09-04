@@ -13,6 +13,7 @@ import FormButtons from '../molecules/FormButtons';
 import Table from '../organisms/table/Table';
 import FormTemplate from '../templates/form/FormTemplate';
 import FormInputGroup from '../molecules/FormInputGroup';
+import { toastHandleDelete } from '../molecules/toastForm/toastDelete';
 
 interface VideoDataForm extends Video {
   key: string
@@ -24,7 +25,7 @@ const NewVideo = (): JSX.Element => {
     catgs: { categories }
   } = useData();
 
-  const { isLight } = useTheme()
+  const { isLight } = useTheme();
 
   const initialDataVideoForm = {
     id: '',
@@ -50,43 +51,16 @@ const NewVideo = (): JSX.Element => {
     const video = obj as Video;
     setIsEditing(true);
     setVideoDataForm({ ...video, key: '' });
-    formRef.current?.scrollIntoView();
+    formRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const handleDelete = (_id: idVidCat): void => {
-    toast(
-      (t) => (
-        <div>
-          <p className={`${isLight ? 'text-black' : 'text-white'} mb-3`}>
-            ¿Estas seguro de eliminar el video?
-          </p>
-          <div className="flex items-center justify-evenly px-4">
-            <button
-              className="bg-red-500 hover:bg-red-600 px-3 py-2 text-white rounded-sm mx-2"
-              onClick={() => {
-                deleteVideo(_id);
-                toast.dismiss(t.id);
-              }}
-            >
-              Eliminar
-            </button>
-            <button
-              className="bg-slate-400 hover:bg-slate-600 px-3 py-2 text-white rounded-sm mx-2"
-              onClick={() => {
-                toast.dismiss(t.id);
-              }}
-            >
-              Cancelar
-            </button>
-          </div>
-        </div>
-      ),
-      {
-        style: {
-          background: isLight ? '#ededed' : '#202020'
-        }
-      }
-    );
+  const handleDelete = (id: idVidCat): void => {
+    toastHandleDelete({
+      isLight,
+      idItem: id,
+      type: 'video',
+      deleteItem: deleteVideo
+    });
   };
 
   const resetVideoFormState = (): void => {
@@ -103,7 +77,7 @@ const NewVideo = (): JSX.Element => {
 
   return (
     <MainTemplate>
-      <div className="py-10" ref={formRef}>
+      <div className="py-5 md:py-10 scroll-smooth" ref={formRef}>
         <FormTemplate title="Nuevo Video">
           <Formik
             initialValues={videoDataForm}
@@ -118,12 +92,9 @@ const NewVideo = (): JSX.Element => {
                 return;
               }
               isEditing ? updateVideo(id, data) : createVideo(data);
-              toast.success(
-                isEditing ? 'Video actualizado' : 'Video creado',
-                {
-                  className: !isLight ? 'bg-neutral-800 text-white' : ''
-                }
-              );
+              toast.success(isEditing ? 'Video actualizado' : 'Video creado', {
+                className: !isLight ? 'bg-neutral-800 text-white' : ''
+              });
               actions.setSubmitting(false);
               actions.resetForm();
               resetVideoFormState();
@@ -153,7 +124,7 @@ const NewVideo = (): JSX.Element => {
                 <FormInputGroup
                   idName="category"
                   as="select"
-                  text="Seleccione categoria"
+                  text="Seleccione categoría"
                   error={errors.category != null && touched.category}
                 >
                   {categories.map(({ id, code, name }) => (
@@ -187,20 +158,21 @@ const NewVideo = (): JSX.Element => {
             )}
           </Formik>
         </FormTemplate>
-        <div className="px-8">
+        <div className="px-4 md:px-8 overflow-x-auto">
           <h2
             className="inline-block text-2xl cursor-pointer select-none hover:underline mt-10"
             onClick={() => {
               setShowTable(!showTable);
             }}
           >
-            Mostrar todos los videos
+            {showTable ? 'Esconder' : 'Mostrar'} todos los videos
           </h2>
           {showTable && (
             <Table
               data={videos}
               categories={categories}
               headers={tableHeaders}
+              type="video"
               editItem={handleEdit}
               removeItem={handleDelete}
             />

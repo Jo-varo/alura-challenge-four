@@ -20,6 +20,7 @@ const Table = ({
   data,
   headers,
   categories,
+  type,
   removeItem,
   editItem
 }: TableProps): JSX.Element => {
@@ -48,14 +49,20 @@ const Table = ({
     return String(value);
   };
 
+  const tableDataStyle =
+    'border border-gray-700 overflow-hidden p-1 md:p-2 text-sm md:text-base';
+
   return (
-    <table className="mx-auto my-10 border-4 border-blue-600 w-full table-fixed">
+    <table
+      id={`${type !== undefined ? `${type}-table` : ''}`}
+      className="mx-auto my-5 md:my-10 border-4 border-blue-600 w-full md:table-fixed"
+    >
       <thead>
         <tr>
           {headers.map(({ title, width }, i) => (
             <th
               key={`th-${i}`}
-              className="border-4 border-blue-600 p-3 text-xl"
+              className="border-4 border-blue-600 p-1 md:p-3 text-base md:text-xl"
               style={{ width }}
             >
               {title}
@@ -67,14 +74,11 @@ const Table = ({
         {data.map(({ id, ...obj }) => (
           <tr key={id}>
             {Object.entries(obj).map(([name, value], i) => (
-              <td
-                key={`td-${i}`}
-                className="border border-gray-700 overflow-hidden p-2"
-              >
+              <td key={`td-${i}`} className={tableDataStyle}>
                 {tableData(name, value)}
               </td>
             ))}
-            <td className="text-center border border-gray-700 overflow-hidden p-2">
+            <td className={`text-center ${tableDataStyle}`}>
               <p
                 className="hover:underline cursor-pointer font-bold select-none py-3"
                 onClick={() => {
@@ -84,7 +88,7 @@ const Table = ({
                 Editar
               </p>
             </td>
-            <td className="text-center border border-gray-700 overflow-hidden p-2">
+            <td className={`text-center ${tableDataStyle}`}>
               <p
                 className="hover:underline cursor-pointer font-bold select-none py-3"
                 onClick={() => {
@@ -99,29 +103,6 @@ const Table = ({
       </tbody>
     </table>
   );
-};
-
-const TableData = ({
-  name,
-  value
-}: {
-  name: string
-  value: string | boolean
-}): JSX.Element => {
-  let result;
-  if (name === 'isFeatured') {
-    result =
-      value === true
-        ? (
-        <BiCheck className="w-10 h-10 mx-auto" />
-          )
-        : (
-        <BiX className="w-10 h-10 mx-auto" />
-          );
-  }
-  if (value === ' ') result = '-';
-
-  return <td className="table-data-cell">{result ?? String(value)}</td>;
 };
 
 export default Table;

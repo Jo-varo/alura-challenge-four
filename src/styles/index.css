@@ -2,20 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
+#root {
+  min-height: 100vh;
+}
+
+/* Banner image by AltumCode - Unsplash */
 .bg-banner-light {
-  background: linear-gradient(0deg, rgba(255, 255, 255, 0.95) 10%, rgba(0, 0, 0, 0.75)),
-    url(https://plus.unsplash.com/premium_photo-1663040543387-cb7c78c4f012?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80);
+  background: linear-gradient(
+      0deg,
+      rgba(245, 245, 245, 0.95) 10%,
+      rgba(0, 0, 0, 0.75)
+    ),
+    url(../assets/banner-image.jpg);
   @apply bg-top bg-[length:100%] bg-no-repeat;
 }
 
 .bg-banner-dark {
   background: linear-gradient(0deg, rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.75)),
-    url(https://plus.unsplash.com/premium_photo-1663040543387-cb7c78c4f012?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80);
+    url(../assets/banner-image.jpg);
   @apply bg-top bg-[length:100%] bg-no-repeat;
-}
-
-#root {
-  min-height: 100vh;
 }
 
 /* Swiper */
@@ -35,7 +40,7 @@
   transition: background-color 0.3s, color 0.3s;
 }
 
-.author-contact{
+.author-contact {
   @apply flex items-center;
 }
 
@@ -47,4 +52,34 @@
 .bot-footer .author-credits:hover img {
   filter: invert(100%) sepia(1%) saturate(439%) hue-rotate(235deg)
     brightness(120%) contrast(100%);
+}
+
+@media (max-width: 768px) {
+
+  /* Video Table */
+  #video-table td:nth-child(1) ~ td,
+  #video-table th:nth-child(1) ~ th {
+    display: none;
+  }
+
+  #video-table td:nth-child(4),
+  #video-table th:nth-child(4){
+    display: table-cell !important;
+  }
+
+  #video-table td:nth-child(5) ~ td,
+  #video-table th:nth-child(5) ~ th {
+    display: table-cell;
+  }
+
+  /* Category Table */
+  #category-table td:nth-child(1) ~ td,
+  #category-table th:nth-child(1) ~ th {
+    display: none;
+  }
+
+  #category-table td:nth-child(5) ~ td,
+  #category-table th:nth-child(5) ~ th {
+    display: table-cell;
+  }
 }

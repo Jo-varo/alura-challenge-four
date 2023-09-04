@@ -43,7 +43,7 @@ const FormInputGroup = ({
   };
 
   return (
-    <div className={newClasses !== '' ? newClasses : 'mb-8'}>
+    <div className={newClasses !== '' ? newClasses : 'mb-6 md:mb-8'}>
       <label htmlFor={idName}>{text}</label>
       {as === 'select'
         ? (

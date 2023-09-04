@@ -37,7 +37,7 @@ const Header = (): JSX.Element => {
           </Link>
           <button
             className={`rounded-full w-9 h-9 md:w-11 md:h-11 border-2 md:border-[3px] flex items-center justify-center ${
-              isLight ? 'border-black' : 'border-white'
+              isLight ? 'border-neutral-100 hover:bg-neutral-100' : 'border-neutral-800 hover:bg-neutral-800'
             }`}
             onClick={switchTheme}
           >
