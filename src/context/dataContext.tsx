@@ -46,7 +46,7 @@ export const DataProvider = ({
 
   const getVideos = (): ListOfVideos => {
     setVideos(data.videos);
-    return videos;
+    return data.videos;
   };
 
   const getCategories = (): ListOfCategories => {

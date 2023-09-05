@@ -20,7 +20,7 @@ const HomeSection = ({ category, videos }: HomeSectionProps): JSX.Element => {
     videos: ListOfVideos,
     isFeatured: boolean
   ): ListOfVideos => {
-    return isFeatured ? [...videos].toSpliced(0, 1) : videos;
+    return isFeatured ? [...videos].filter((_, i) => i !== 0) : videos;
   };
 
   const sectionClasses = (isFeatured: boolean, isLight: boolean): string => {

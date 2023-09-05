@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/consistent-type-assertions */
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
 import 'swiper/css';
@@ -16,7 +17,7 @@ const Carousel = ({ color, videos }: CarouselProps): JSX.Element => {
     <Swiper
       style={{
         '--swiper-navigation-color': 'white'
-      }}
+      } as React.CSSProperties}
       slidesPerView={1}
       breakpoints={{ 768: { slidesPerView: 3 } }}
       spaceBetween={15}
