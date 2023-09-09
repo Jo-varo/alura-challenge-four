@@ -50,7 +50,7 @@ const NewVideo = (): JSX.Element => {
   const handleEdit = (obj: Video | Category): void => {
     const video = obj as Video;
     setIsEditing(true);
-    setVideoDataForm({ ...video, key: '' });
+    setVideoDataForm({ ...video, key: initialDataVideoForm.key });
     formRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
@@ -82,7 +82,7 @@ const NewVideo = (): JSX.Element => {
           <Formik
             initialValues={videoDataForm}
             validationSchema={VideoFormSchema}
-            onSubmit={(values, actions) => {
+            onSubmit={async (values, actions) => {
               const { id, key, ...data } = values;
               if (key !== apiCode) {
                 toast.error('Código de seguridad incorrecto', {
@@ -91,7 +91,7 @@ const NewVideo = (): JSX.Element => {
                 actions.setSubmitting(false);
                 return;
               }
-              isEditing ? updateVideo(id, data) : createVideo(data);
+              isEditing ? await updateVideo(id, data) : await createVideo(data);
               toast.success(isEditing ? 'Video actualizado' : 'Video creado', {
                 className: !isLight ? 'bg-neutral-800 text-white' : ''
               });

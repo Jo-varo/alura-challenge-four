@@ -1,6 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 
-import data from '../data/data.json';
 import type {
   CategoryData,
   ListOfCategories,
@@ -8,21 +7,33 @@ import type {
   VideoData,
   idVidCat
 } from '../types';
+import {
+  createVideoRequest,
+  deleteVideoRequest,
+  getVideosRequest,
+  updateVideoRequest
+} from '../api/videos';
+import {
+  createCategoryRequest,
+  deleteCategoryRequest,
+  getCategoriesRequest,
+  updateCategoryRequest
+} from '../api/categories';
 
 interface contextResult {
   vids: {
     videos: ListOfVideos
-    getVideos: () => ListOfVideos
-    createVideo: (video: VideoData) => void
-    updateVideo: (id: idVidCat, video: VideoData) => void
-    deleteVideo: (id: idVidCat) => void
+    getVideos: () => Promise<void>
+    createVideo: (video: VideoData) => Promise<void>
+    updateVideo: (id: idVidCat, video: VideoData) => Promise<void>
+    deleteVideo: (id: idVidCat) => Promise<void>
   }
   catgs: {
     categories: ListOfCategories
-    getCategories: () => ListOfCategories
-    createCategory: (category: CategoryData) => void
-    updateCategory: (id: idVidCat, category: CategoryData) => void
-    deleteCategory: (id: idVidCat) => void
+    getCategories: () => Promise<void>
+    createCategory: (category: CategoryData) => Promise<void>
+    updateCategory: (id: idVidCat, category: CategoryData) => Promise<void>
+    deleteCategory: (id: idVidCat) => Promise<void>
   }
 }
 
@@ -44,58 +55,76 @@ export const DataProvider = ({
   const [videos, setVideos] = useState<ListOfVideos>([]);
   const [categories, setCategories] = useState<ListOfCategories>([]);
 
-  const getVideos = (): ListOfVideos => {
-    setVideos(data.videos);
-    return data.videos;
+  const getVideos = async (): Promise<void> => {
+    const dataRes = await getVideosRequest();
+    if (dataRes !== undefined) {
+      setVideos(dataRes);
+    }
   };
 
-  const getCategories = (): ListOfCategories => {
-    setCategories(data.categories);
-    return data.categories;
+  const getCategories = async (): Promise<void> => {
+    const dataRes = await getCategoriesRequest();
+    if (dataRes !== undefined) {
+      setCategories(dataRes);
+    }
   };
 
-  const createVideo = (video: VideoData): void => {
-    const id = crypto.randomUUID();
-    const newVideos = [...videos, { id, ...video }];
-    setVideos(newVideos);
+  const createVideo = async (video: VideoData): Promise<void> => {
+    try {
+      const res = await createVideoRequest(video);
+      const newVideos = res !== undefined ? [...videos, res] : videos;
+      setVideos(newVideos);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const deleteVideo = (id: idVidCat): void => {
-    const newVideos = videos.filter((video) => video.id !== id);
-    setVideos(newVideos);
+  const deleteVideo = async (id: idVidCat): Promise<void> => {
+    const dataRes = await deleteVideoRequest(id);
+    if (dataRes) {
+      setVideos(videos.filter((video) => video.id !== id));
+    }
   };
 
-  const updateVideo = (id: idVidCat, updatedVideo: VideoData): void => {
-    const newVideos = videos.map((video) =>
-      video.id === id ? { id, ...updatedVideo } : video
-    );
-    setVideos(newVideos);
+  const updateVideo = async (
+    id: idVidCat,
+    updatedVideo: VideoData
+  ): Promise<void> => {
+    const dataRes = await updateVideoRequest(id, updatedVideo);
+    if (dataRes !== undefined) {
+      setVideos(videos.map((video) => (video.id === id ? dataRes : video)));
+    }
   };
 
-  const createCategory = (category: CategoryData): void => {
-    const id = crypto.randomUUID();
-    const newCategories = [...categories, { id, ...category }];
-    setCategories(newCategories);
+  const createCategory = async (category: CategoryData): Promise<void> => {
+    const dataRes = await createCategoryRequest(category);
+    if (dataRes !== undefined) {
+      setCategories([...categories, dataRes]);
+    }
   };
 
-  const updateCategory = (
+  const updateCategory = async (
     id: idVidCat,
     updatedCategory: CategoryData
-  ): void => {
-    const newCategories = categories.map((category) =>
-      category.id === id ? { id, ...updatedCategory } : category
-    );
-    setCategories(newCategories);
+  ): Promise<void> => {
+    const dataRes = await updateCategoryRequest(id, updatedCategory);
+    if (dataRes !== undefined) {
+      setCategories(
+        categories.map((category) => (category.id === id ? dataRes : category))
+      );
+    }
   };
 
-  const deleteCategory = (id: idVidCat): void => {
-    const newCategories = categories.filter((category) => category.id !== id);
-    setCategories(newCategories);
+  const deleteCategory = async (id: idVidCat): Promise<void> => {
+    const dataRes = await deleteCategoryRequest(id);
+    if (dataRes) {
+      setCategories(categories.filter((category) => category.id !== id));
+    }
   };
 
   useEffect(() => {
-    getVideos();
-    getCategories();
+    void getVideos();
+    void getCategories();
   }, []);
 
   return (

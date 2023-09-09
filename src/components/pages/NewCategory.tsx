@@ -51,7 +51,7 @@ const NewCategory = (): JSX.Element => {
   const handleEdit = (obj: Category | Video): void => {
     const category = obj as Category;
     setIsEditing(true);
-    setCategoryDataForm({ ...category, key: '' });
+    setCategoryDataForm({ ...category, key: initialDataCategoryForm.key });
     formRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
@@ -84,7 +84,7 @@ const NewCategory = (): JSX.Element => {
           <Formik
             initialValues={categoryDataForm}
             validationSchema={CategoryFormSchema}
-            onSubmit={(values, actions) => {
+            onSubmit={async (values, actions) => {
               const { id, key, ...data } = values;
               if (key !== apiCode) {
                 toast.error('Código de seguridad incorrecto', {
@@ -93,7 +93,7 @@ const NewCategory = (): JSX.Element => {
                 actions.setSubmitting(false);
                 return;
               }
-              isEditing ? updateCategory(id, data) : createCategory(data);
+              isEditing ? await updateCategory(id, data) : await createCategory(data);
               toast.success(
                 isEditing ? 'Categoria actualizada' : 'Categoria creada',
                 {

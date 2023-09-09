@@ -6,7 +6,7 @@ const securityCode = Yup.string()
 
 export const VideoFormSchema = Yup.object().shape({
   title: Yup.string()
-    .min(5, 'Titulo demasiado corto, mínimo 250 caracteres')
+    .min(5, 'Titulo demasiado corto, mínimo 5 caracteres')
     .max(25, 'Titulo demasiado largo, máximo 25 caracteres')
     .required('Campo requerido'),
   url: Yup.string().required('Campo requerido'),

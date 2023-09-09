@@ -5,7 +5,7 @@ interface Params {
   isLight: boolean
   idItem: idVidCat
   type: 'category' | 'video'
-  deleteItem: (id: idVidCat) => void
+  deleteItem: (id: idVidCat) => Promise<void>
 }
 
 export const toastHandleDelete = ({
@@ -14,32 +14,47 @@ export const toastHandleDelete = ({
   type,
   deleteItem
 }: Params): void => {
+  const textByType = type === 'category' ? 'la categoría' : 'el video';
+  const successByType =
+    type === 'category' ? 'Categoría eliminada' : 'Video eliminado';
+  const errorByType =
+    type === 'category'
+      ? 'La categoría no pudo ser eliminada'
+      : 'El video no pudo ser eliminado';
+  const dismissToasts = (): number =>
+    setTimeout(() => {
+      toast.dismiss();
+    }, 800);
+
   toast(
     (t) => (
       <div>
         <p className={`${isLight ? 'text-black' : 'text-white'} mb-3`}>
-          ¿Estas seguro de eliminar{' '}
-          {type === 'category' ? 'la categoría' : 'el video'}?
+          ¿Estas seguro de eliminar {textByType}?
         </p>
         <div className="flex items-center justify-evenly px-4">
           <button
             className="bg-red-500 hover:bg-red-700 px-3 py-2 text-white rounded-sm mx-2"
             onClick={() => {
-              deleteItem(idItem);
-              toast.dismiss(t.id);
-              const successDeleted = toast.success(
-                `${
-                  type === 'category'
-                    ? 'Categoría eliminada'
-                    : 'Video eliminado'
-                }`,
-                {
-                  className: !isLight ? 'bg-neutral-800 text-white' : ''
+              void (async () => {
+                toast.dismiss(t.id);
+                try {
+                  await toast.promise(
+                    deleteItem(idItem),
+                    {
+                      loading: 'Eliminando...',
+                      success: <b>{successByType}</b>,
+                      error: <b>{errorByType}</b>
+                    },
+                    {
+                      className: !isLight ? 'bg-neutral-800 text-white' : ''
+                    }
+                  );
+                  dismissToasts();
+                } catch (error) {
+                  dismissToasts();
                 }
-              );
-              setTimeout(() => {
-                toast.dismiss(successDeleted);
-              }, 800);
+              })();
             }}
           >
             Eliminar
