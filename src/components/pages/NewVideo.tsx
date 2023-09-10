@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Formik } from 'formik';
+import { Formik, type FormikHelpers } from 'formik';
 import toast from 'react-hot-toast';
 
 import type { Category, Video, idVidCat } from '../../types';
@@ -47,6 +47,48 @@ const NewVideo = (): JSX.Element => {
     { title: 'Remover', width: '10%' }
   ];
 
+  const handleSubmit = async (
+    values: VideoDataForm,
+    actions: FormikHelpers<VideoDataForm>
+  ): Promise<void> => {
+    const { id, key, ...data } = values;
+    if (key !== apiCode) {
+      toast.error('Código de seguridad incorrecto', {
+        className: !isLight ? 'bg-neutral-800 text-white' : ''
+      });
+      actions.setSubmitting(false);
+      return;
+    }
+
+    isEditing
+      ? await toast.promise(
+        updateVideo(id, data),
+        {
+          loading: 'Actualizando...',
+          success: <b>Video actualizado</b>,
+          error: <b>El video no se actualizo</b>
+        },
+        {
+          className: !isLight ? 'bg-neutral-800 text-white' : ''
+        }
+      )
+      : await toast.promise(
+        createVideo(data),
+        {
+          loading: 'Creando...',
+          success: <b>Video creado</b>,
+          error: <b>El video no se creo</b>
+        },
+        {
+          className: !isLight ? 'bg-neutral-800 text-white' : ''
+        }
+      );
+
+    actions.setSubmitting(false);
+    actions.resetForm();
+    resetVideoFormState();
+  };
+
   const handleEdit = (obj: Video | Category): void => {
     const video = obj as Video;
     setIsEditing(true);
@@ -82,23 +124,7 @@ const NewVideo = (): JSX.Element => {
           <Formik
             initialValues={videoDataForm}
             validationSchema={VideoFormSchema}
-            onSubmit={async (values, actions) => {
-              const { id, key, ...data } = values;
-              if (key !== apiCode) {
-                toast.error('Código de seguridad incorrecto', {
-                  className: !isLight ? 'bg-neutral-800 text-white' : ''
-                });
-                actions.setSubmitting(false);
-                return;
-              }
-              isEditing ? await updateVideo(id, data) : await createVideo(data);
-              toast.success(isEditing ? 'Video actualizado' : 'Video creado', {
-                className: !isLight ? 'bg-neutral-800 text-white' : ''
-              });
-              actions.setSubmitting(false);
-              actions.resetForm();
-              resetVideoFormState();
-            }}
+            onSubmit={handleSubmit}
             enableReinitialize
           >
             {({ handleSubmit, handleReset, isSubmitting, errors, touched }) => (
@@ -106,18 +132,20 @@ const NewVideo = (): JSX.Element => {
                 <FormInputGroup
                   idName="title"
                   type="text"
-                  text="Titulo"
+                  text="Titulo del video"
                   error={errors.title != null && touched.title}
                 />
                 <FormInputGroup
                   idName="url"
                   type="text"
+                  autocomplete
                   text="Link del video"
                   error={errors.url != null && touched.url}
                 />
                 <FormInputGroup
                   idName="poster"
                   type="text"
+                  autocomplete
                   text="Link imagen de video"
                   error={errors.poster != null && touched.poster}
                 />
@@ -143,6 +171,7 @@ const NewVideo = (): JSX.Element => {
                 <FormInputGroup
                   idName="key"
                   type="text"
+                  autocomplete
                   text="Código de seguridad"
                   error={errors.key != null && touched.key}
                 />

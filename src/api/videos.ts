@@ -9,7 +9,8 @@ export const getVideosRequest = async (): Promise<ListOfVideos | undefined> => {
     if (!res.ok) throw new Error('error in api');
     return await res.json();
   } catch (error) {
-    console.error(error)
+    console.error(error);
+    throw error;
   }
 };
 
@@ -27,6 +28,7 @@ export const createVideoRequest = async (
     return data;
   } catch (error) {
     console.error(error);
+    throw error;
   }
 };
 
@@ -45,12 +47,13 @@ export const updateVideoRequest = async (
     return data;
   } catch (error) {
     console.error(error);
+    throw error;
   }
 };
 
 export const deleteVideoRequest = async (id: idVidCat): Promise<boolean> => {
   try {
-    const res = await fetch(`${url}/1${id}`, { method: 'DELETE' });
+    const res = await fetch(`${url}/${id}`, { method: 'DELETE' });
     if (!res.ok) throw new Error('error in api');
     return true;
   } catch (error) {

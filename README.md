@@ -2,11 +2,13 @@
 
 > Este proyecto usa Vite, React TypeScript, Tailwind CSS, Swiper, Formik, Yup, React-icons, React-hot-toast
 
-Este es el último proyecto hecho para el challenge ONE de Alura y el último challenge de Alura Oracle Next Education, este proyecto es un gestor de videos.
+Este es el último proyecto hecho para el challenge ONE de Alura y el último challenge de Alura Oracle Next Education, este proyecto es un gestor de videos, donde se puede agregar videos y categorias, actualizarlos y eliminarlos. Como backend usa Express.
 
 Este proyecto me sirvió para practicar React, Typescript y algunas librerías que aportan diferentes funcionalidades.
 
 Desarrollado por **[Jo-Varo](https://github.com/Jo-varo)**.
+
+Este es el mockup del proyecto: [Figma](https://www.figma.com/file/T6P42CQ8S8WJ7OImPuu91H/AluraFlix-ESP?type=design&node-id=1-106&mode=design)
 
 Para ejecutar este proyecto, ejecutar el siguiente comando.
 

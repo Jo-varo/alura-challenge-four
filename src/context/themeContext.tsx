@@ -28,8 +28,7 @@ export const ThemeProvider = ({
   const switchTheme = (): void => {
     const newTheme = isLight ? 'dark' : 'light';
     localStorage.setItem('theme', newTheme);
-    changeRootBackground(newTheme);
-    setTheme(newTheme);
+    setThemeAndBackground(newTheme);
   };
 
   const changeRootBackground = (newTheme: ITheme['theme']): void => {
@@ -39,21 +38,46 @@ export const ThemeProvider = ({
     }
   };
 
+  const setThemeAndBackground = (newTheme: ITheme['theme']): void => {
+    setTheme(newTheme);
+    changeRootBackground(newTheme);
+  };
+
+  useEffect(() => {
+    // Listen changes in localStorage
+    const handleStorageChange = (event: StorageEvent): void => {
+      if (event.key === 'theme') {
+        const { newValue } = event;
+        if (newValue !== null) {
+          if (newValue === 'light' || newValue === 'dark') {
+            setThemeAndBackground(newValue);
+          }
+        }
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
+
   useEffect(() => {
     setIsLight(theme === 'light');
   }, [theme]);
 
   useEffect(() => {
     const storedTheme = localStorage.getItem('theme');
-    if (storedTheme !== null) {
-      if (storedTheme === 'light' || storedTheme === 'dark') {
-        changeRootBackground(storedTheme);
-        setTheme(storedTheme);
-      }
+    if (
+      storedTheme !== null &&
+      (storedTheme === 'light' || storedTheme === 'dark')
+    ) {
+      setThemeAndBackground(storedTheme);
       return;
     }
-    changeRootBackground('dark');
-    setTheme('dark');
+    setThemeAndBackground('dark');
+    localStorage.setItem('theme', 'dark');
   }, []);
 
   return (

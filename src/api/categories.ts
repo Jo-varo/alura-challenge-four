@@ -17,6 +17,7 @@ ListOfCategories | undefined
     return await res.json();
   } catch (error) {
     console.error(error);
+    throw error;
   }
 };
 
@@ -34,6 +35,7 @@ export const createCategoryRequest = async (
     return data;
   } catch (error) {
     console.error(error);
+    throw error;
   }
 };
 
@@ -52,12 +54,13 @@ export const updateCategoryRequest = async (
     return data;
   } catch (error) {
     console.error(error);
+    throw error;
   }
 };
 
 export const deleteCategoryRequest = async (id: idVidCat): Promise<boolean> => {
   try {
-    const res = await fetch(`${url}/a${id}`, { method: 'DELETE' });
+    const res = await fetch(`${url}/${id}`, { method: 'DELETE' });
     if (!res.ok) throw new Error('error in api');
     return true;
   } catch (error) {

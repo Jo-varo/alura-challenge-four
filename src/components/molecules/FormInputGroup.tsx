@@ -4,6 +4,7 @@ import { useTheme } from '../../context/themeContext';
 interface Props {
   idName: string
   text: string
+  autocomplete?: boolean
   type?: string
   as?: string
   newClasses?: string
@@ -14,15 +15,16 @@ interface Props {
 const FormInputGroup = ({
   idName,
   text,
+  autocomplete = false,
   type,
   as,
   newClasses = '',
-  error,
+  error = false,
   children
 }: Props): JSX.Element => {
   const { isLight } = useTheme();
 
-  const classes = (type: string | undefined, error = false): string => {
+  const classes = (type: string | undefined, error: boolean): string => {
     const bgColor = isLight ? 'bg-white' : 'bg-neutral-900';
     const generalStyle = `${bgColor} border-gray-400 block w-full rounded border focus:outline-none`;
     const colorField = 'py-2 px-4 h-[58px]';
@@ -55,7 +57,7 @@ const FormInputGroup = ({
         </Field>
           )
         : (
-        <Field {...inputProps} type={type} placeholder={text} />
+        <Field {...inputProps} type={type} placeholder={text} autoComplete={autocomplete ? 'on' : 'off'}/>
           )}
       <ErrorMessage
         component="p"

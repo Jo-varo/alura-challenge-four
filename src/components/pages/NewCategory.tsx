@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { ErrorMessage, Field, Formik } from 'formik';
+import { ErrorMessage, Field, Formik, type FormikHelpers } from 'formik';
 import toast from 'react-hot-toast';
 
 import type { Category, Video, idVidCat } from '../../types';
@@ -48,6 +48,48 @@ const NewCategory = (): JSX.Element => {
     key: ''
   };
 
+  const handleSubmit = async (
+    values: CategoryDataForm,
+    actions: FormikHelpers<CategoryDataForm>
+  ): Promise<void> => {
+    const { id, key, ...data } = values;
+    if (key !== apiCode) {
+      toast.error('Código de seguridad incorrecto', {
+        className: !isLight ? 'bg-neutral-800 text-white' : ''
+      });
+      actions.setSubmitting(false);
+      return;
+    }
+
+    isEditing
+      ? await toast.promise(
+        updateCategory(id, data),
+        {
+          loading: 'Actualizando...',
+          success: <b>Categoría actualizada</b>,
+          error: <b>La categoría no se actualizo</b>
+        },
+        {
+          className: !isLight ? 'bg-neutral-800 text-white' : ''
+        }
+      )
+      : await toast.promise(
+        createCategory(data),
+        {
+          loading: 'Creando...',
+          success: <b>Categoría creada</b>,
+          error: <b>La categoría no se creo</b>
+        },
+        {
+          className: !isLight ? 'bg-neutral-800 text-white' : ''
+        }
+      );
+
+    actions.setSubmitting(false);
+    actions.resetForm();
+    resetCategoryFormState();
+  };
+
   const handleEdit = (obj: Category | Video): void => {
     const category = obj as Category;
     setIsEditing(true);
@@ -84,26 +126,7 @@ const NewCategory = (): JSX.Element => {
           <Formik
             initialValues={categoryDataForm}
             validationSchema={CategoryFormSchema}
-            onSubmit={async (values, actions) => {
-              const { id, key, ...data } = values;
-              if (key !== apiCode) {
-                toast.error('Código de seguridad incorrecto', {
-                  className: !isLight ? 'bg-neutral-800 text-white' : ''
-                });
-                actions.setSubmitting(false);
-                return;
-              }
-              isEditing ? await updateCategory(id, data) : await createCategory(data);
-              toast.success(
-                isEditing ? 'Categoria actualizada' : 'Categoria creada',
-                {
-                  className: !isLight ? 'bg-neutral-800 text-white' : ''
-                }
-              );
-              actions.setSubmitting(false);
-              actions.resetForm();
-              resetCategoryFormState();
-            }}
+            onSubmit={handleSubmit}
             enableReinitialize
           >
             {({ handleSubmit, handleReset, isSubmitting, touched, errors }) => (
@@ -118,6 +141,7 @@ const NewCategory = (): JSX.Element => {
                   idName="shortDescription"
                   text="Descripción corta"
                   type="text"
+                  autocomplete
                   error={
                     errors.shortDescription != null && touched.shortDescription
                   }
@@ -167,6 +191,7 @@ const NewCategory = (): JSX.Element => {
                 <FormInputGroup
                   idName="key"
                   text="Código de seguridad"
+                  autocomplete
                   type="text"
                   error={errors.key != null && touched.key}
                 />

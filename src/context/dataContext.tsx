@@ -76,6 +76,7 @@ export const DataProvider = ({
       setVideos(newVideos);
     } catch (error) {
       console.error(error);
+      throw error;
     }
   };
 

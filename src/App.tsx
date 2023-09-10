@@ -6,7 +6,7 @@ import { ThemeProvider } from './context/themeContext';
 const App = (): JSX.Element => {
   return (
     <ThemeProvider>
-      <RouterProvider router={Router}/>
+      <RouterProvider router={Router} />
       <Toaster />
     </ThemeProvider>
   );
