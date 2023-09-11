@@ -47,7 +47,7 @@ export const toastHandleDelete = ({
                       error: <b>{errorByType}</b>
                     },
                     {
-                      className: !isLight ? 'bg-neutral-800 text-white' : ''
+                      className: !isLight ? 'dark-toast' : ''
                     }
                   );
                   dismissToasts();

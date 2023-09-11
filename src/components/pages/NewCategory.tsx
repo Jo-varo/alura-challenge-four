@@ -55,7 +55,7 @@ const NewCategory = (): JSX.Element => {
     const { id, key, ...data } = values;
     if (key !== apiCode) {
       toast.error('Código de seguridad incorrecto', {
-        className: !isLight ? 'bg-neutral-800 text-white' : ''
+        className: !isLight ? 'dark-toast' : ''
       });
       actions.setSubmitting(false);
       return;
@@ -70,7 +70,7 @@ const NewCategory = (): JSX.Element => {
           error: <b>La categoría no se actualizo</b>
         },
         {
-          className: !isLight ? 'bg-neutral-800 text-white' : ''
+          className: !isLight ? 'dark-toast' : ''
         }
       )
       : await toast.promise(
@@ -81,7 +81,7 @@ const NewCategory = (): JSX.Element => {
           error: <b>La categoría no se creo</b>
         },
         {
-          className: !isLight ? 'bg-neutral-800 text-white' : ''
+          className: !isLight ? 'dark-toast' : ''
         }
       );
 

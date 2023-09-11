@@ -54,7 +54,7 @@ const NewVideo = (): JSX.Element => {
     const { id, key, ...data } = values;
     if (key !== apiCode) {
       toast.error('Código de seguridad incorrecto', {
-        className: !isLight ? 'bg-neutral-800 text-white' : ''
+        className: !isLight ? 'dark-toast' : ''
       });
       actions.setSubmitting(false);
       return;
@@ -69,7 +69,7 @@ const NewVideo = (): JSX.Element => {
           error: <b>El video no se actualizo</b>
         },
         {
-          className: !isLight ? 'bg-neutral-800 text-white' : ''
+          className: !isLight ? 'dark-toast' : ''
         }
       )
       : await toast.promise(
@@ -80,7 +80,7 @@ const NewVideo = (): JSX.Element => {
           error: <b>El video no se creo</b>
         },
         {
-          className: !isLight ? 'bg-neutral-800 text-white' : ''
+          className: !isLight ? 'dark-toast' : ''
         }
       );
 
