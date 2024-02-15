@@ -1,13 +1,14 @@
 import { useData } from '../../context/dataContext';
-import type { ListOfCategories } from '../../types';
+import { RiLoader4Fill } from 'react-icons/ri';
+import type { ListOfCategories, ListOfVideos } from '../../types';
 import MainTemplate from '../templates/MainTemplate';
 import HomeSection from '../organisms/home/HomeSection';
 import HomeNoData from '../molecules/HomeNoData';
 
 const Home = (): JSX.Element => {
   const {
-    vids: { videos },
-    catgs: { categories }
+    vids: { videos, isVideosLoading },
+    catgs: { categories, isCategoriesLoading }
   } = useData();
 
   const orderCategories = (categories: ListOfCategories): ListOfCategories => {
@@ -25,22 +26,52 @@ const Home = (): JSX.Element => {
     return categories;
   };
 
-  return (
-    <MainTemplate>
-      {categories.length > 0
-        ? (
-            orderCategories(categories).map((category) => (
+  const renderMessageStatusData = (
+    categories: ListOfCategories,
+    isCategoriesLoading: boolean,
+    videos: ListOfVideos,
+    isVideosLoading: boolean
+  ): JSX.Element => {
+    if (isCategoriesLoading || isVideosLoading) {
+      return (
+        <div className='my-10'>
+          <RiLoader4Fill className="mx-auto text-6xl mb-4 animate-spin"/>
+          <h3 className="text-center text-3xl">Cargando</h3>
+        </div>
+      );
+    }
+
+    if (categories.length === 0 && videos.length === 0) {
+      return <HomeNoData type="data" />;
+    }
+
+    if (categories.length === 0) {
+      return <HomeNoData type="category" />;
+    }
+
+    if (videos.length === 0) return <HomeNoData type="video" />;
+
+    return (
+      <>
+        {orderCategories(categories).map((category) => (
           <HomeSection
             key={category.id}
             category={category}
             videos={videos.filter((video) => video.category === category.code)}
           />
-            ))
-          )
-        : (
-        <HomeNoData type="category" />
-          )}
-      {videos.length === 0 && <HomeNoData type="video" />}
+        ))}
+      </>
+    );
+  };
+
+  return (
+    <MainTemplate>
+      {renderMessageStatusData(
+        categories,
+        isCategoriesLoading,
+        videos,
+        isVideosLoading
+      )}
     </MainTemplate>
   );
 };

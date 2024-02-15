@@ -23,6 +23,7 @@ import {
 interface contextResult {
   vids: {
     videos: ListOfVideos
+    isVideosLoading: boolean
     getVideos: () => Promise<void>
     createVideo: (video: VideoData) => Promise<void>
     updateVideo: (id: idVidCat, video: VideoData) => Promise<void>
@@ -30,6 +31,7 @@ interface contextResult {
   }
   catgs: {
     categories: ListOfCategories
+    isCategoriesLoading: boolean
     getCategories: () => Promise<void>
     createCategory: (category: CategoryData) => Promise<void>
     updateCategory: (id: idVidCat, category: CategoryData) => Promise<void>
@@ -53,19 +55,27 @@ export const DataProvider = ({
   children: React.ReactNode
 }): JSX.Element => {
   const [videos, setVideos] = useState<ListOfVideos>([]);
+  const [isVideosLoading, setIsVideosLoading] = useState<boolean>(false);
+
   const [categories, setCategories] = useState<ListOfCategories>([]);
+  const [isCategoriesLoading, setIsCategoriesLoading] =
+    useState<boolean>(false);
 
   const getVideos = async (): Promise<void> => {
+    setIsVideosLoading(true);
     const dataRes = await getVideosRequest();
     if (dataRes !== undefined) {
       setVideos(dataRes);
+      setIsVideosLoading(false);
     }
   };
 
   const getCategories = async (): Promise<void> => {
+    setIsVideosLoading(true);
     const dataRes = await getCategoriesRequest();
     if (dataRes !== undefined) {
       setCategories(dataRes);
+      setIsCategoriesLoading(false);
     }
   };
 
@@ -133,6 +143,7 @@ export const DataProvider = ({
       value={{
         vids: {
           videos,
+          isVideosLoading,
           getVideos,
           createVideo,
           deleteVideo,
@@ -140,6 +151,7 @@ export const DataProvider = ({
         },
         catgs: {
           categories,
+          isCategoriesLoading,
           getCategories,
           createCategory,
           updateCategory,

@@ -12,6 +12,7 @@ Este es el mockup del proyecto: [Figma](https://www.figma.com/file/T6P42CQ8S8WJ7
 
 Para ejecutar este proyecto, ejecutar el siguiente comando.
 
+``` npm run build ```
 ``` npm run start ```
 
 ---
